@@ -9,8 +9,8 @@ class Index:
 
     def __init__(self):
         self._index = {}
-        self._global_frequency = {}
         self._total_words = 0
+        self._inverted_index = {}
 
     @staticmethod
     def clean(content):
@@ -27,7 +27,7 @@ class Index:
         return d
 
     def repopulate_counts(self):
-        self._total_words = sum([i[1] for i in self._global_frequency.items()])
+        self._total_words = sum([i[1]['count'] for i in self._inverted_index.items()])
 
     def word_count(self):
         return self._total_words
@@ -38,9 +38,17 @@ class Index:
         token_count = len(tokens)
         for token in tokens:
             histogram = Index.increment_key(histogram, token)
-            self._global_frequency = Index.increment_key(self._global_frequency, token)
-
-        self._index[document_id] = {
+        token_set = set(tokens)
+        for token in token_set:
+            t_c = tokens.count(token)
+            if token not in self._inverted_index:
+                self._inverted_index[token] = {
+                    'count': 0,
+                    'frequency': {}
+                }
+            self._inverted_index[token]['frequency'][document_id] = t_c
+            self._inverted_index[token]['count'] += t_c
+            self._index[document_id] = {
             'count': token_count,
             'frequency': histogram
         }
@@ -50,11 +58,11 @@ class Index:
     def doc_count(self):
         return len(self._index)
 
-    def print(self, indent_size=2):
-        printer = pprint.PrettyPrinter(indent=indent_size)
-        print('-----\nGlobal Frequency:')
-        printer.pprint(self._global_frequency)
-        print('-----\nWord count: %s' % self.word_count())
+    def print(self, indent_size=2, width=10):
+        printer = pprint.PrettyPrinter(indent=indent_size, width=width)
         print('-----\nDocument Count: %s' % self.doc_count())
+        print('-----\nWord count: %s' % self.word_count())
         print('-----\nIndex:')
         printer.pprint(self._index)
+        print('-----\nInverted Index:')
+        printer.pprint(self._inverted_index)
