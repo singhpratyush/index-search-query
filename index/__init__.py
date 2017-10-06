@@ -6,6 +6,7 @@ from nltk.corpus import stopwords as nltk_stopwords
 class Index:
 
     tokenizer = RegexpTokenizer(r'\w+')
+
     def __init__(self):
         self._index = {}
         self._global_frequency = {}
@@ -46,11 +47,14 @@ class Index:
         self.repopulate_counts()
         return self.word_count()
 
+    def doc_count(self):
+        return len(self._index)
+
     def print(self, indent_size=2):
         printer = pprint.PrettyPrinter(indent=indent_size)
         print('-----\nGlobal Frequency:')
         printer.pprint(self._global_frequency)
-        print('-----\nWord count:')
-        print(self.word_count())
+        print('-----\nWord count: %s' % self.word_count())
+        print('-----\nDocument Count: %s' % self.doc_count())
         print('-----\nIndex:')
         printer.pprint(self._index)
