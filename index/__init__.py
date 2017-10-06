@@ -49,9 +49,9 @@ class Index:
             self._inverted_index[token]['frequency'][document_id] = t_c
             self._inverted_index[token]['count'] += t_c
             self._index[document_id] = {
-            'count': token_count,
-            'frequency': histogram
-        }
+                'count': token_count,
+                'frequency': histogram
+            }
         self.repopulate_counts()
         return self.word_count()
 
