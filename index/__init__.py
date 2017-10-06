@@ -9,6 +9,7 @@ class Index:
     def __init__(self):
         self._index = {}
         self._global_frequency = {}
+        self._total_words = 0
 
     @staticmethod
     def clean(content):
@@ -24,6 +25,12 @@ class Index:
             d[k] = 1
         return d
 
+    def repopulate_counts(self):
+        self._total_words = sum([i[1] for i in self._global_frequency.items()])
+
+    def word_count(self):
+        return self._total_words
+
     def index(self, document_id, content):
         histogram = {}  # Empty if already exists
         tokens = Index.clean(content)
@@ -36,10 +43,14 @@ class Index:
             'count': token_count,
             'frequency': histogram
         }
+        self.repopulate_counts()
+        return self.word_count()
 
     def print(self, indent_size=2):
         printer = pprint.PrettyPrinter(indent=indent_size)
-        print('Global Frequency: ')
+        print('-----\nGlobal Frequency:')
         printer.pprint(self._global_frequency)
-        print('Index:')
+        print('-----\nWord count:')
+        print(self.word_count())
+        print('-----\nIndex:')
         printer.pprint(self._index)
