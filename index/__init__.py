@@ -1,16 +1,20 @@
 import pprint
+from nltk.tokenize import RegexpTokenizer
+from nltk.corpus import stopwords as nltk_stopwords
 
 
 class Index:
+
+    tokenizer = RegexpTokenizer(r'\w+')
     def __init__(self):
         self._index = {}
         self._global_frequency = {}
 
     @staticmethod
     def clean(content):
-        # TODO: Make this work properly
-        content = content.lower()
-        return content.split()
+        tokens = Index.tokenizer.tokenize(content)
+        tokens = [i for i in tokens if i not in nltk_stopwords.words()]
+        return tokens
 
     @staticmethod
     def increment_key(d, k):
