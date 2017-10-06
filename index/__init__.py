@@ -1,3 +1,6 @@
+import pprint
+
+
 class Index:
     def __init__(self):
         self._index = {}
@@ -6,6 +9,7 @@ class Index:
     @staticmethod
     def clean(content):
         # TODO: Make this work properly
+        content = content.lower()
         return content.split()
 
     @staticmethod
@@ -28,3 +32,10 @@ class Index:
             'count': token_count,
             'frequency': histogram
         }
+
+    def print(self, indent_size=2):
+        printer = pprint.PrettyPrinter(indent=indent_size)
+        print('Global Frequency: ')
+        printer.pprint(self._global_frequency)
+        print('Index:')
+        printer.pprint(self._index)
