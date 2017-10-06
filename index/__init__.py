@@ -1,4 +1,3 @@
-import pprint
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords as nltk_stopwords
 
@@ -11,6 +10,9 @@ class Index:
         self._index = {}
         self._total_words = 0
         self._inverted_index = {}
+
+    def __str__(self):
+        return '<Index documents=%s words=%s>' % (self.doc_count(), self.word_count())
 
     @staticmethod
     def clean(content):
@@ -57,12 +59,3 @@ class Index:
 
     def doc_count(self):
         return len(self._index)
-
-    def print(self, indent_size=2, width=10):
-        printer = pprint.PrettyPrinter(indent=indent_size, width=width)
-        print('-----\nDocument Count: %s' % self.doc_count())
-        print('-----\nWord count: %s' % self.word_count())
-        print('-----\nIndex:')
-        printer.pprint(self._index)
-        print('-----\nInverted Index:')
-        printer.pprint(self._inverted_index)
