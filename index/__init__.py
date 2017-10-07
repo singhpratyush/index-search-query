@@ -20,14 +20,6 @@ class Index:
         tokens = [i for i in tokens if i not in nltk_stopwords.words()]
         return tokens
 
-    @staticmethod
-    def increment_key(d, k):
-        try:
-            d[k] += 1
-        except KeyError:
-            d[k] = 1
-        return d
-
     def repopulate_counts(self):
         self._total_words = sum([i[1]['count'] for i in self._inverted_index.items()])
 
