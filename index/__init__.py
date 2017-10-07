@@ -7,7 +7,7 @@ class Index:
     tokenizer = RegexpTokenizer(r'\w+')
 
     def __init__(self):
-        self._index = {}
+        self._doc_set = set()
         self._total_words = 0
         self._inverted_index = {}
 
@@ -35,11 +35,7 @@ class Index:
         return self._total_words
 
     def index(self, document_id, content):
-        histogram = {}  # Empty if already exists
         tokens = Index.clean(content)
-        token_count = len(tokens)
-        for token in tokens:
-            histogram = Index.increment_key(histogram, token)
         token_set = set(tokens)
         for token in token_set:
             t_c = tokens.count(token)
@@ -50,12 +46,9 @@ class Index:
                 }
             self._inverted_index[token]['frequency'][document_id] = t_c
             self._inverted_index[token]['count'] += t_c
-            self._index[document_id] = {
-                'count': token_count,
-                'frequency': histogram
-            }
         self.repopulate_counts()
+        self._doc_set.add(document_id)
         return self.word_count()
 
     def doc_count(self):
-        return len(self._index)
+        return len(self._doc_set)
