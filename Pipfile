@@ -7,6 +7,8 @@ verify_ssl = true
 
 [packages]
 nltk = "*"
+halo = "*"
+
 
 [requires]
 python_version = "3.5"
