@@ -60,3 +60,4 @@ venv.bak/
 /site
 .mypy_cache/
 index.bin
+data
