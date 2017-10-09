@@ -1,5 +1,5 @@
 import sys
-import pickle
+import index as ir_index
 import magazine_index
 
 
@@ -9,11 +9,9 @@ def main():
         print('Creating index from data at %s' % path)
         index = magazine_index.create_dictionary_index(path)
         print('Saving index to "index.bin"')
-        with open('index.bin', 'wb') as f:
-            pickle.dump(index, f)
+        index.save('index.bin')
     print('Loading index from "index.bin"')
-    with open('index.bin', 'rb') as f:
-        index = pickle.load(f)
+    index = ir_index.Index.from_file('index.bin')
     print(index)
 
 

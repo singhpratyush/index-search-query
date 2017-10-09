@@ -1,3 +1,5 @@
+import pickle
+
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords as nltk_stopwords
 
@@ -44,3 +46,27 @@ class Index:
 
     def doc_count(self):
         return len(self._doc_set)
+
+    def save(self, filename):
+        with open(filename, 'wb') as f:
+            pickle.dump(self._inverted_index, f)
+
+    def load(self, filename):
+        with open(filename, 'rb') as f:
+            self._inverted_index = pickle.load(f)
+        return self._populate_documents()
+
+    def _populate_documents(self):
+        self._doc_set = set()
+        for token in self._inverted_index:
+            frequencies = self._inverted_index[token]['frequency']
+            for doc in frequencies:
+                self._doc_set.add(doc)
+        self.repopulate_counts()
+        return self.doc_count()
+
+    @staticmethod
+    def from_file(filename):
+        index = Index()
+        index.load(filename)
+        return index

@@ -1,9 +1,7 @@
 import os
 import re
 from index import Index
-from halo import Halo
 
-spinner = Halo(text='Creating index', spinner='dots')
 re_text = re.compile(r'<TEXT>(.*?)</TEXT>', re.DOTALL)
 
 
@@ -27,8 +25,7 @@ def lazy_load_docs(path):
 
 def create_dictionary_index(path):
     index = Index()
-    spinner.start()
     for doc_id, content in lazy_load_docs(path):
         index.index(doc_id, content)
-    spinner.stop()
+        print('%s | Indexed %s' % (index, doc_id))
     return index
