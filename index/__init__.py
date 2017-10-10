@@ -70,3 +70,9 @@ class Index:
         index = Index()
         index.load(filename)
         return index
+
+    def get_docs_for_token(self, token, count=None):
+        docs = self._inverted_index[token]['frequency']
+        sorted_docs = sorted(docs.items(), key=lambda k, v: (v, k))
+        doc_list = list(sorted_docs)
+        return doc_list if count is None else doc_list[:count]
