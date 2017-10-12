@@ -1,5 +1,6 @@
 import operator
 import pickle
+import threading
 
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords as nltk_stopwords
@@ -13,6 +14,7 @@ class Index:
         self._doc_set = set()
         self._total_words = 0
         self._inverted_index = {}
+        self._lock = threading.Lock()
 
     def __str__(self):
         return '<Index documents=%s words=%s>' % (self.doc_count(), self.word_count())
@@ -34,16 +36,22 @@ class Index:
         token_set = set(tokens)
         for token in token_set:
             t_c = tokens.count(token)
-            if token not in self._inverted_index:
+            self._update_inverted_index(token, document_id, t_c)
+        self.repopulate_counts()
+        self._doc_set.add(document_id)
+        return self.word_count()
+
+    def _update_inverted_index(self, token, document, count):
+        if token in self._inverted_index:
+            with self._lock:
+                self._inverted_index[token]['frequency'][document] = count
+                self._inverted_index[token]['count'] += count
+        else:
+            with self._lock:
                 self._inverted_index[token] = {
                     'count': 0,
                     'frequency': {}
                 }
-            self._inverted_index[token]['frequency'][document_id] = t_c
-            self._inverted_index[token]['count'] += t_c
-        self.repopulate_counts()
-        self._doc_set.add(document_id)
-        return self.word_count()
 
     def doc_count(self):
         return len(self._doc_set)
