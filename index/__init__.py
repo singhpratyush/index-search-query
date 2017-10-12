@@ -1,6 +1,7 @@
 import operator
 import pickle
 import threading
+import queue
 
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords as nltk_stopwords
@@ -15,6 +16,7 @@ class Index:
         self._total_words = 0
         self._inverted_index = {}
         self._lock = threading.Lock()
+        self._bulk_index_queue = queue.Queue()
 
     def __str__(self):
         return '<Index documents=%s words=%s>' % (self.doc_count(), self.word_count())
@@ -31,13 +33,14 @@ class Index:
     def word_count(self):
         return self._total_words
 
-    def index(self, document_id, content):
+    def index(self, document_id, content, repopulate=True):
         tokens = Index.clean(content)
         token_set = set(tokens)
         for token in token_set:
             t_c = tokens.count(token)
             self._update_inverted_index(token, document_id, t_c)
-        self.repopulate_counts()
+        if repopulate:
+            self.repopulate_counts()
         self._doc_set.add(document_id)
         return self.word_count()
 
@@ -85,3 +88,24 @@ class Index:
         sorted_docs = sorted(docs.items(), key=operator.itemgetter(1), reverse=True)
         doc_list = list(sorted_docs)
         return doc_list if count is None else doc_list[:count]
+
+    def bulk_index(self, doc_list, threads=4):
+        for doc_item in doc_list:
+            self._bulk_index_queue.put(doc_item)
+        thread_list = []
+        for i in range(threads):
+            th = threading.Thread(target=self._bulk_index_worker)
+            th.start()
+            thread_list.append(th)
+        for th in thread_list:
+            th.join()
+        self.repopulate_counts()
+        return self.doc_count()
+
+    def _bulk_index_worker(self):
+        while True:
+            try:
+                doc_id, content = self._bulk_index_queue.get(1)
+            except InterruptedError:
+                return
+            self.index(doc_id, content, repopulate=False)
