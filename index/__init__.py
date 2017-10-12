@@ -5,12 +5,14 @@ import queue
 
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords as nltk_stopwords
+from nltk.stem import PorterStemmer
 
 
 class Index:
 
     tokenizer = RegexpTokenizer(r'\w+')
     stop_words = nltk_stopwords.words()
+    stemmer = PorterStemmer()
 
     def __init__(self, verbose=False):
         self._doc_set = set()
@@ -30,7 +32,7 @@ class Index:
     @staticmethod
     def clean(content):
         tokens = Index.tokenizer.tokenize(content)
-        tokens = [i for i in tokens if i not in Index.stop_words]
+        tokens = [Index.stemmer.stem(i) for i in tokens if i not in Index.stop_words]
         return tokens
 
     def repopulate_counts(self):
