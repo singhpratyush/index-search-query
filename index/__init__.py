@@ -10,13 +10,19 @@ from nltk.corpus import stopwords as nltk_stopwords
 class Index:
 
     tokenizer = RegexpTokenizer(r'\w+')
+    stop_words = nltk_stopwords.words()
 
-    def __init__(self):
+    def __init__(self, verbose=False):
         self._doc_set = set()
         self._total_words = 0
         self._inverted_index = {}
         self._lock = threading.Lock()
         self._bulk_index_queue = queue.Queue()
+        self._verbose = verbose
+
+    def print(self, content):
+        if self._verbose:
+            print(content)
 
     def __str__(self):
         return '<Index documents=%s words=%s>' % (self.doc_count(), self.word_count())
@@ -24,7 +30,7 @@ class Index:
     @staticmethod
     def clean(content):
         tokens = Index.tokenizer.tokenize(content)
-        tokens = [i for i in tokens if i not in nltk_stopwords.words()]
+        tokens = [i for i in tokens if i not in Index.stop_words]
         return tokens
 
     def repopulate_counts(self):
@@ -91,6 +97,7 @@ class Index:
 
     def bulk_index(self, doc_list, threads=4):
         for doc_item in doc_list:
+            self.print('Added doc %s to queue' % doc_item[0])
             self._bulk_index_queue.put(doc_item)
         thread_list = []
         for i in range(threads):
@@ -103,9 +110,10 @@ class Index:
         return self.doc_count()
 
     def _bulk_index_worker(self):
-        while True:
+        while not self._bulk_index_queue.empty():
             try:
-                doc_id, content = self._bulk_index_queue.get(1)
+                doc_id, content = self._bulk_index_queue.get(0.001)
             except InterruptedError:
                 return
             self.index(doc_id, content, repopulate=False)
+            self.print('Indexed %s' % doc_id)
