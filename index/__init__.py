@@ -118,7 +118,7 @@ class Index:
     def _bulk_index_worker(self):
         while True:
             try:
-                doc_id, content = self._bulk_index_queue.get(timeout=5)
+                doc_id, content = self._bulk_index_queue.get(timeout=0.1)
             except:
                 return
             self.index(doc_id, content, repopulate=False)
