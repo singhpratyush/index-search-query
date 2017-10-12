@@ -60,8 +60,8 @@ class Index:
         else:
             with self._lock:
                 self._inverted_index[token] = {
-                    'count': 0,
-                    'frequency': {}
+                    'count': count,
+                    'frequency': {document: count}
                 }
 
     def doc_count(self):

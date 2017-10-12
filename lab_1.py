@@ -15,8 +15,11 @@ def main():
     print(index)
     print('Please start entering words to get top 5 documents containing them (CTRL+C to exit) - ')
     while True:
-        token = input('Enter word: ')
-        print(index.get_docs_for_token(token, count=5))
+        try:
+            token = input('Enter word: ')
+            print(index.get_docs_for_token(token, count=5))
+        except KeyboardInterrupt:
+            break
 
 
 if __name__ == '__main__':
