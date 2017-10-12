@@ -116,4 +116,4 @@ class Index:
             except InterruptedError:
                 return
             self.index(doc_id, content, repopulate=False)
-            self.print('Indexed %s. %s remaining' % (doc_id, self._bulk_index_queue.qsize()))
+            self.print('Remaining - %s. Indexed %s' % (self._bulk_index_queue.qsize(), doc_id))
