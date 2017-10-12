@@ -12,7 +12,6 @@ def render(path):
 
 def lazy_load_docs(path):
     docs = [path]
-    count = 0
     while docs:
         top = docs.pop()
         if os.path.isdir(top):
@@ -24,8 +23,6 @@ def lazy_load_docs(path):
 
 
 def create_dictionary_index(path):
-    index = Index()
-    for doc_id, content in lazy_load_docs(path):
-        index.index(doc_id, content)
-        print('%s | Indexed %s' % (index, doc_id))
+    index = Index(verbose=True)
+    index.bulk_index(lazy_load_docs(path))
     return index
