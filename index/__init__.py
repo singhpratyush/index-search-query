@@ -92,6 +92,10 @@ class Index:
         return index
 
     def get_docs_for_token(self, token, count=None):
+        token = Index.clean(token)
+        if len(token) == 0:
+            return []
+        token = token[0]
         docs = self._inverted_index[token]['frequency']
         sorted_docs = sorted(docs.items(), key=operator.itemgetter(1), reverse=True)
         doc_list = list(sorted_docs)
