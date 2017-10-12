@@ -24,5 +24,5 @@ def lazy_load_docs(path):
 
 def create_dictionary_index(path):
     index = Index(verbose=True)
-    index.bulk_index(lazy_load_docs(path))
+    index.bulk_index(lazy_load_docs(path), threads=16)
     return index

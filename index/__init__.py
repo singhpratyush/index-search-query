@@ -95,7 +95,7 @@ class Index:
         doc_list = list(sorted_docs)
         return doc_list if count is None else doc_list[:count]
 
-    def bulk_index(self, doc_list, threads=4):
+    def bulk_index(self, doc_list, threads=8):
         for doc_item in doc_list:
             self.print('Added doc %s to queue' % doc_item[0])
             self._bulk_index_queue.put(doc_item)
@@ -116,4 +116,4 @@ class Index:
             except InterruptedError:
                 return
             self.index(doc_id, content, repopulate=False)
-            self.print('Indexed %s' % doc_id)
+            self.print('Indexed %s. %s remaining' % (doc_id, self._bulk_index_queue.qsize()))
