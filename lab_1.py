@@ -13,6 +13,10 @@ def main():
     print('Loading index from "index.bin"')
     index = ir_index.Index.from_file('index.bin')
     print(index)
+    print('Please start entering words to get top 5 documents containing them (CTRL+C to exit) - ')
+    while True:
+        token = input('Enter word: ')
+        print(index.get_docs_for_token(token, count=5))
 
 
 if __name__ == '__main__':
