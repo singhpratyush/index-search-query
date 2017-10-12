@@ -102,24 +102,24 @@ class Index:
         return doc_list if count is None else doc_list[:count]
 
     def bulk_index(self, doc_list, threads=8):
-        for doc_item in doc_list:
-            self.print('Added doc %s to queue' % doc_item[0])
-            self._bulk_index_queue.put(doc_item)
         thread_list = []
         for i in range(threads):
             th = threading.Thread(target=self._bulk_index_worker)
             th.start()
             thread_list.append(th)
+        for doc_item in doc_list:
+            self.print('Added doc %s to queue' % doc_item[0])
+            self._bulk_index_queue.put(doc_item)
         for th in thread_list:
             th.join()
         self.repopulate_counts()
         return self.doc_count()
 
     def _bulk_index_worker(self):
-        while not self._bulk_index_queue.empty():
+        while True:
             try:
-                doc_id, content = self._bulk_index_queue.get(0.001)
-            except InterruptedError:
+                doc_id, content = self._bulk_index_queue.get(timeout=5)
+            except:
                 return
             self.index(doc_id, content, repopulate=False)
             self.print('Remaining - %s. Indexed %s' % (self._bulk_index_queue.qsize(), doc_id))
