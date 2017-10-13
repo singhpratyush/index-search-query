@@ -31,8 +31,8 @@ Since indexing documents can take a lot of time, here are some already indexed f
 
 | Name | Link | Size | Comments |
 |------|------|------|----------|
-|  |  | 478 MB | Full index, 392k documents |
-| `index.bin` | [LINK](https://drive.google.com/open?id=0BxDMRh_L_8pOT055OVJZdXlUSjA) | 374 MB | 303k documents |
+| `index.bin` | [LINK](https://drive.google.com/open?id=0BxDMRh_L_8pOUzlZQ0JJMUtYd1E) | 478 MB | Full index, 392k documents |
+| `index.bin.bak1` | [LINK](https://drive.google.com/open?id=0BxDMRh_L_8pObWU0ZkE1NHBTUUU) | 374 MB | 303k documents |
 | `index.bin.bak` | [LINK](https://drive.google.com/open?id=0BxDMRh_L_8pOYmRKU0I5MWJhbG8) | 36 MB | 25.8k documents |
 
 ### Example
