@@ -47,3 +47,27 @@ Enter word: delhi
 Enter word: messi
 [('1100612_sports_story_12557276.utf8', 27), ('1100527_sports_story_12492679.utf8', 17), ('1100619_sports_story_12582889.utf8', 17), ('1090529_calcutta_story_11031479.utf8', 16), ('1100613_frontpage_story_12560387.utf8', 12)]
 ```
+
+---
+
+## Development
+
+`pipenv` is used for this project - 
+
+```bash
+$ sudo -H pip install pipenv
+```
+
+To install dependencies, simply
+
+```bash
+$ pipenv install
+```
+
+To enter a virtualenv shell
+
+```bash
+$ pipenv shell
+```
+
+This will spawn a new shell where all dependencies will be present.
