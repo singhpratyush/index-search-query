@@ -19,7 +19,7 @@ This will create an inverted index and save it to a file called `index.bin`. You
 ```bash
 $ python lab1.py
 Loading index from "index.bin"
-<Index documents=303290 words=83225120>
+<Index documents=392577 words=105314026>
 ...
 ```
 
@@ -29,7 +29,8 @@ Since indexing documents can take a lot of time, here are some already indexed f
 
 | Name | Link | Size | Comments |
 |------|------|------|----------|
-| `index.bin` | [LINK](https://drive.google.com/open?id=0BxDMRh_L_8pOT055OVJZdXlUSjA) | 374 MB | Full indexed corpus, 303k documents |
+|  |  | 478 MB | Full index, 392k documents |
+| `index.bin` | [LINK](https://drive.google.com/open?id=0BxDMRh_L_8pOT055OVJZdXlUSjA) | 374 MB | 303k documents |
 | `index.bin.bak` | [LINK](https://drive.google.com/open?id=0BxDMRh_L_8pOYmRKU0I5MWJhbG8) | 36 MB | 25.8k documents |
 
 ### Example
