@@ -1,5 +1,7 @@
 # Information Retrieval Lab
 
+> Autumn 2017-18
+
 ## Lab 1: The Inverted Index
 
 ### Dataset
