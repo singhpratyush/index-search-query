@@ -1,11 +1,12 @@
+import math
 import operator
 import pickle
-import threading
 import queue
+import threading
 
-from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords as nltk_stopwords
 from nltk.stem import PorterStemmer
+from nltk.tokenize import RegexpTokenizer
 
 
 class Index:
@@ -21,6 +22,12 @@ class Index:
         self._lock = threading.Lock()
         self._bulk_index_queue = queue.Queue()
         self._verbose = verbose
+
+    def idf(self, token):
+        if token not in self._inverted_index:
+            return 0
+        count = len(self._inverted_index[token]['frequency'])
+        return math.log(self.doc_count() / count)
 
     def print(self, content):
         if self._verbose:
