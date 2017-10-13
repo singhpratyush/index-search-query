@@ -103,7 +103,7 @@ class Index:
         if len(token) == 0:
             return []
         token = token[0]
-        docs = self._inverted_index[token]['frequency']
+        docs = self._inverted_index.get(token, {'frequency': {}})['frequency']
         sorted_docs = sorted(docs.items(), key=operator.itemgetter(1), reverse=True)
         doc_list = list(sorted_docs)
         return doc_list if count is None else doc_list[:count]
