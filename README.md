@@ -1,8 +1,10 @@
-# Information Retrieval Lab
+# Index Search Query
 
-> Autumn 2017-18
+Inverted Index, Query Formulation and Ranking from Scratch in Python.
 
-## Lab 1: The Inverted Index
+> Part of Information Retrieval Lab (Autumn 2017-18)
+
+## Part 1: The Inverted Index
 
 ### Dataset
 
